@@ -13,6 +13,11 @@ h1{margin:0 0 7px;font-size:31px;line-height:1.04;letter-spacing:-.035em}
 .controls{display:grid;grid-template-columns:minmax(320px,1fr) 145px 135px 175px;gap:9px;margin-top:15px}
 input,select{width:100%;background:#070d13;color:var(--text);border:1px solid var(--line2);border-radius:11px;padding:11px 12px;outline:none}
 input:focus,select:focus{border-color:#607a93;box-shadow:0 0 0 3px rgba(110,150,188,.12)}
+.tabs{display:flex;gap:9px;margin:18px 0 14px;flex-wrap:wrap}
+.tab{appearance:none;border:1px solid #33485a;background:#0a121a;color:#9fb2c3;border-radius:10px;padding:11px 14px;font-weight:900;font-size:11px;letter-spacing:.045em;cursor:pointer;transition:.15s ease}
+.tab:hover{border-color:#587087;color:#eef5fb}
+.tab.active{background:#dce8f2;color:#0a1118;border-color:#dce8f2;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.tab-panel[hidden]{display:none!important}
 .count{margin-top:10px;color:var(--muted);font-size:12px}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px;margin-top:20px}
 .card{background:linear-gradient(180deg,#101a24,#0a1118);border:1px solid var(--line);border-radius:17px;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-shadow:0 10px 30px rgba(0,0,0,.17);transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
@@ -52,15 +57,20 @@ h2{font-size:18px;line-height:1.13;margin:9px 0 4px;letter-spacing:-.02em}
 </style></head><body><div class="wrap">
 <section class="hero">
 <h1>POKÉMON EX-ERA DIVERSE SLEEPER BOUNTY BOARD</h1>
-<div class="sub">54 visual targets • EX / stamped / reverse holo / e-Reader • match the exact printing before you buy <span class="badge">Board baseline: October 06, 2026</span></div>
-<div class="controls">
+<div class="sub">54 established targets • 4 active prospects • EX / stamped / reverse holo / e-Reader • match the exact printing before you buy <span class="badge">Board baseline: October 06, 2026</span></div>
+<div class="tabs" role="tablist" aria-label="Bounty board sections">
+  <button type="button" class="tab active" id="tabKnown" role="tab" aria-selected="true" aria-controls="knownContent">👀 PEOPLE USUALLY KNOW WHAT'S UP</button>
+  <button type="button" class="tab" id="tabProspects" role="tab" aria-selected="false" aria-controls="prospectsPanel">🔎 PROSPECTS</button>
+</div>
+<div class="main-only controls">
 <input id="q" placeholder="Search Pokémon, set, number, variant…">
 <select id="tier"><option value="">All tiers</option><option>GRAIL</option><option>TARGET</option><option>SLEEPER</option></select>
 <select id="year"><option value="">All years</option><option>2002</option><option>2003</option><option>2004</option><option>2005</option><option>2006</option><option>2007</option></select>
 <select id="sort"><option value="tier">Tier</option><option value="buy">BUY AT low→high</option><option value="raw">Raw low→high</option><option value="name">Name A→Z</option></select>
 </div>
-<div class="count" id="count"></div>
+<div class="main-only count" id="count"></div>
 </section>
+<section class="tab-panel" id="prospectsPanel" role="tabpanel" aria-labelledby="tabProspects" hidden>
 <section class="radar" id="radar">
   <div class="radar-top">
     <div><h3>⚡ MARKET RADAR — EARLY SIGNALS</h3><div class="radar-sub">This is the new layer: hunt the <b>trajectory</b>, not just today's low pop. A card stays on Radar until the evidence is strong enough to graduate to the main bounty list.</div></div>
@@ -81,8 +91,9 @@ h2{font-size:18px;line-height:1.13;margin:9px 0 4px;letter-spacing:-.02em}
   </div>
   <div class="radar-foot">Current examples use public market trackers as signal inputs. Sparse-sale estimates are labeled and are never treated as proof of a breakout. Source methodology: transaction-shaped pricing + PSA/GemRate population data. </div>
 </section>
-<div class="grid" id="grid"></div>
-<div class="foot">
+</section>
+<div class="main-only grid" id="grid"></div>
+<div class="main-only foot">
 <b>Dad rule:</b> match Pokémon + set + card number + variant → bright light → center / corners / edges / surface → compare to <b>BUY AT</b> → anything questionable = PASS.
 <br><br>
 <b>Photo rule:</b> these are now <span class="good">actual card-reference photos</span>, not the price-page preview graphics. Tap a card photo to open the larger image.
@@ -102,14 +113,18 @@ const RADAR=[
 ];
 function renderRadar(){const el=document.getElementById('radarGrid'); if(!el)return; el.innerHTML=RADAR.map(x=>`<div class="signal"><div class="sig-head"><span class="name">${esc(x.name)}</span><span class="flag">${esc(x.signal)}</span></div><div class="meta">${esc(x.set)} • ${esc(x.number)} • ${esc(x.variant)}</div><div class="big">${esc(x.move)}</div><div class="small">30D PSA 10 fair-value move • PSA 10 pop ${x.pop} • Radar ${x.score}/100</div><div class="note">${esc(x.note)}</div><a class="src" href="${esc(x.url)}" target="_blank" rel="noopener">Open source ↗</a></div>`).join('')}
 const PROSPECTS=[
- {name:'Shelgon δ',set:'EX Dragon Frontiers',number:'38/101',variant:'Reverse Holo',status:'BEST EARLY STRUCTURE',price:'$25 raw NM',buy:20,qty:5,total:100,pop:13,graded:86,signal:'PSA 9 +30.6% / PSA 10 +3.9%',image:'https://www.pokevalues.com/card/shelgon-38-ex-dragon-frontiers-reverse-holo/opengraph-image?88f6bb503e5649bd',url:'https://www.tcgberg.com/cards/shelgon-38-ex-dragon-frontiers-reverse-holo',note:'Lower grades are moving before the gem tier. Raw is still around $25 while PSA 10 is around $913, so the thesis is early movement + scarce gems rather than a card everyone already knows is hot.',confidence:'MEDIUM',confirm:'PSA 10 follows the PSA 9 move while raw stays controlled.',invalidate:'Raw supply floods or PSA 10 stays flat while new grading supply accelerates.'},
- {name:'Noctowl',set:'EX Unseen Forces',number:'43/115',variant:'Reverse Holo',status:'ACCELERATING',price:'$29 raw NM',buy:25,qty:3,total:75,pop:12,graded:108,signal:'PSA 10 +52.9% / PSA 9 +40.7%',image:'https://www.pokevalues.com/card/noctowl-43-unseen-forces-reverse-holo/opengraph-image?88f6bb503e5649bd',url:'https://www.tcgberg.com/cards/noctowl-43-unseen-forces-reverse-holo',note:'Already moving, but raw is still around $29 and the PSA 10 population is only 12. This is the buy-the-raw-lag play.',confidence:'MEDIUM-LOW',confirm:'Fresh PSA 10 sales confirm the higher band and raw NM listings start thinning.',invalidate:'Raw copies become abundant or PSA 10 momentum collapses on stronger sales volume.'},
- {name:'Spinarak',set:'EX Unseen Forces',number:'75/115',variant:'Reverse Holo',status:'HIGH-BETA SLEEPER',price:'$55 raw NM',buy:45,qty:3,total:135,pop:9,graded:76,signal:'Raw +83.3% / PSA 10 +37.2%',image:'https://www.pokevalues.com/card/spinarak-75-unseen-forces-reverse-holo/opengraph-image?88f6bb503e5649bd',url:'https://www.tcgberg.com/cards/spinarak-75-unseen-forces-reverse-holo',note:'Most aggressive of the four. Only 9 PSA 10s and raw has moved sharply, but graded evidence is sparse. Small position only.',confidence:'LOW-MEDIUM',confirm:'New raw sales confirm the higher floor and PSA 9/10 sales stack higher.',invalidate:'The raw move reverses or fresh sales fail to confirm the apparent repricing.'},
- {name:'Meganium',set:'EX Unseen Forces',number:'9/115',variant:'Holo',status:'SECOND-ORDER BET',price:'$30 raw NM',buy:25,qty:3,total:75,pop:42,graded:273,signal:'PSA 10 +71.3% / PSA 9 +24.5%',image:'https://www.pokevalues.com/card/meganium-9-unseen-forces-holo/opengraph-image?88f6bb503e5649bd',url:'https://www.tcgberg.com/cards/meganium-9-unseen-forces-holo',note:'Intentionally higher-pop. The thesis is second-order Unseen Forces demand while this recognizable holo remains an affordable raw hunt. Current sources conflict, so size stays small.',confidence:'LOW-MEDIUM',confirm:'Independent sales confirm the PSA 10 move instead of one model spike.',invalidate:'PSA 10 normalizes sharply or raw supply stays abundant with no follow-through.'}
+ {name:'Shelgon δ',set:'EX Dragon Frontiers',number:'38/101',variant:'Reverse Holo',status:'BEST EARLY STRUCTURE',price:'$25 raw NM',buy:20,qty:5,total:100,pop:13,graded:86,signal:'PSA 9 +30.6% / PSA 10 +3.9%',image:'https://www.pokevalues.com/card/shelgon-38-ex-dragon-frontiers-reverse-holo/opengraph-image?88f6bb503e5649bd',fallback:'https://images.pokemontcg.io/ex15/38_hires.png',url:'https://www.tcgberg.com/cards/shelgon-38-ex-dragon-frontiers-reverse-holo',note:'Lower grades are moving before the gem tier. Raw is still around $25 while PSA 10 is around $913, so the thesis is early movement + scarce gems rather than a card everyone already knows is hot.',confidence:'MEDIUM',confirm:'PSA 10 follows the PSA 9 move while raw stays controlled.',invalidate:'Raw supply floods or PSA 10 stays flat while new grading supply accelerates.'},
+ {name:'Noctowl',set:'EX Unseen Forces',number:'43/115',variant:'Reverse Holo',status:'ACCELERATING',price:'$29 raw NM',buy:25,qty:3,total:75,pop:12,graded:108,signal:'PSA 10 +52.9% / PSA 9 +40.7%',image:'https://www.pokevalues.com/card/noctowl-43-unseen-forces-reverse-holo/opengraph-image?88f6bb503e5649bd',fallback:'https://images.pokemontcg.io/ex10/43_hires.png',url:'https://www.tcgberg.com/cards/noctowl-43-unseen-forces-reverse-holo',note:'Already moving, but raw is still around $29 and the PSA 10 population is only 12. This is the buy-the-raw-lag play.',confidence:'MEDIUM-LOW',confirm:'Fresh PSA 10 sales confirm the higher band and raw NM listings start thinning.',invalidate:'Raw copies become abundant or PSA 10 momentum collapses on stronger sales volume.'},
+ {name:'Spinarak',set:'EX Unseen Forces',number:'75/115',variant:'Reverse Holo',status:'HIGH-BETA SLEEPER',price:'$55 raw NM',buy:45,qty:3,total:135,pop:9,graded:76,signal:'Raw +83.3% / PSA 10 +37.2%',image:'https://www.pokevalues.com/card/spinarak-75-unseen-forces-reverse-holo/opengraph-image?88f6bb503e5649bd',fallback:'https://images.pokemontcg.io/ex10/75_hires.png',url:'https://www.tcgberg.com/cards/spinarak-75-unseen-forces-reverse-holo',note:'Most aggressive of the four. Only 9 PSA 10s and raw has moved sharply, but graded evidence is sparse. Small position only.',confidence:'LOW-MEDIUM',confirm:'New raw sales confirm the higher floor and PSA 9/10 sales stack higher.',invalidate:'The raw move reverses or fresh sales fail to confirm the apparent repricing.'},
+ {name:'Meganium',set:'EX Unseen Forces',number:'9/115',variant:'Holo',status:'SECOND-ORDER BET',price:'$30 raw NM',buy:25,qty:3,total:75,pop:42,graded:273,signal:'PSA 10 +71.3% / PSA 9 +24.5%',image:'https://www.pokevalues.com/card/meganium-9-unseen-forces-holo/opengraph-image?88f6bb503e5649bd',fallback:'https://images.pokemontcg.io/ex10/9_hires.png',url:'https://www.tcgberg.com/cards/meganium-9-unseen-forces-holo',note:'Intentionally higher-pop. The thesis is second-order Unseen Forces demand while this recognizable holo remains an affordable raw hunt. Current sources conflict, so size stays small.',confidence:'LOW-MEDIUM',confirm:'Independent sales confirm the PSA 10 move instead of one model spike.',invalidate:'PSA 10 normalizes sharply or raw supply stays abundant with no follow-through.'}
 ];
+function fallbackProspectImage(img){
+  if(img.dataset.fallback && img.src!==img.dataset.fallback){img.onerror=null;img.src=img.dataset.fallback;return;}
+  img.style.display='none';
+}
 function renderProspects(){
  const el=document.getElementById('prospectsGrid'); if(!el)return;
- el.innerHTML=PROSPECTS.map(x=>'<div class="signal"><div class="sig-head"><span class="name">'+esc(x.name)+'</span><span class="flag">'+esc(x.status)+'</span></div><div class="meta">'+esc(x.set)+' • '+esc(x.number)+' • '+esc(x.variant)+'</div><div style="margin-top:8px;display:flex;justify-content:center;background:#070d13;border:1px solid #2a3b4c;border-radius:9px;padding:7px"><img src="'+esc(x.image)+'" alt="'+esc(x.name+' '+x.number+' '+x.variant)+'" style="height:150px;max-width:110px;object-fit:contain" loading="lazy" onerror="this.remove()"></div><div class="big">BUY ≤ $'+x.buy+'</div><div class="small">'+esc(x.signal)+' • PSA 10 pop '+x.pop+' • '+x.graded+' graded</div><div class="note">'+esc(x.note)+'</div><div class="small" style="margin-top:8px"><b>Starter position:</b> '+x.qty+' × $'+x.buy+' = $'+x.total+' • <b>Confidence:</b> '+esc(x.confidence)+'</div><div class="small" style="margin-top:6px"><b>Confirm:</b> '+esc(x.confirm)+'</div><div class="small" style="margin-top:6px"><b>Invalidation:</b> '+esc(x.invalidate)+'</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px"><a class="src" href="'+esc(x.url)+'" target="_blank" rel="noopener">Market source ↗</a><a class="src" href="https://www.ebay.com/sch/i.html?_nkw='+encodeURIComponent(x.name+' '+x.set+' '+x.number+' '+x.variant)+'&LH_Sold=1&LH_Complete=1" target="_blank" rel="noopener">Sold comps ↗</a></div></div>').join('');
+ el.innerHTML=PROSPECTS.map(x=>'<div class="signal"><div class="sig-head"><span class="name">'+esc(x.name)+'</span><span class="flag">'+esc(x.status)+'</span></div><div class="meta">'+esc(x.set)+' • '+esc(x.number)+' • '+esc(x.variant)+'</div><div style="margin-top:8px;display:flex;justify-content:center;background:#070d13;border:1px solid #2a3b4c;border-radius:9px;padding:7px"><a href="'+esc(x.image)+'" target="_blank" rel="noopener" title="Open prospect card photo"><img src="'+esc(x.image)+'" data-fallback="'+esc(x.fallback)+'" alt="'+esc(x.name+' '+x.number+' '+x.variant)+'" style="height:190px;max-width:140px;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4))" loading="lazy" onerror="fallbackProspectImage(this)"></a></div><div class="big">BUY ≤ $'+x.buy+'</div><div class="small">'+esc(x.signal)+' • PSA 10 pop '+x.pop+' • '+x.graded+' graded</div><div class="note">'+esc(x.note)+'</div><div class="small" style="margin-top:8px"><b>Starter position:</b> '+x.qty+' × $'+x.buy+' = $'+x.total+' • <b>Confidence:</b> '+esc(x.confidence)+'</div><div class="small" style="margin-top:6px"><b>Confirm:</b> '+esc(x.confirm)+'</div><div class="small" style="margin-top:6px"><b>Invalidation:</b> '+esc(x.invalidate)+'</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px"><a class="src" href="'+esc(x.url)+'" target="_blank" rel="noopener">Market source ↗</a><a class="src" href="https://www.ebay.com/sch/i.html?_nkw='+encodeURIComponent(x.name+' '+x.set+' '+x.number+' '+x.variant)+'&LH_Sold=1&LH_Complete=1" target="_blank" rel="noopener">Sold comps ↗</a></div></div>').join('');
 }
 const SET_ID={
   'EX Team Rocket Returns':'ex7','EX Hidden Legends':'ex5','EX FireRed & LeafGreen':'ex6','EX Deoxys':'ex8',
@@ -170,6 +185,18 @@ function render(){
       </div></article>`;
   }).join('');
 }
+function setTab(which){
+  const isProspects=which==='prospects';
+  document.getElementById('tabKnown').classList.toggle('active',!isProspects);
+  document.getElementById('tabProspects').classList.toggle('active',isProspects);
+  document.getElementById('tabKnown').setAttribute('aria-selected',String(!isProspects));
+  document.getElementById('tabProspects').setAttribute('aria-selected',String(isProspects));
+  document.getElementById('prospectsPanel').hidden=!isProspects;
+  document.querySelectorAll('.main-only').forEach(el=>el.style.display=isProspects?'none':'');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('tabKnown').addEventListener('click',()=>setTab('known'));
+document.getElementById('tabProspects').addEventListener('click',()=>setTab('prospects'));
 renderRadar();renderProspects();
 for(const id of ['q','tier','year','sort']) document.getElementById(id).addEventListener(id==='q'?'input':'change',render);
 render();
