@@ -64,9 +64,17 @@ h2{font-size:18px;line-height:1.13;margin:9px 0 4px;letter-spacing:-.02em}
 <section class="radar" id="radar">
   <div class="radar-top">
     <div><h3>⚡ MARKET RADAR — EARLY SIGNALS</h3><div class="radar-sub">This is the new layer: hunt the <b>trajectory</b>, not just today's low pop. A card stays on Radar until the evidence is strong enough to graduate to the main bounty list.</div></div>
-    <span class="scan-pill">LAST SCAN • OCT 6, 2026</span>
+    <span class="scan-pill">LAST SCAN • OCT 6, 2026 • PROSPECTS ADDED</span>
   </div>
-  <div class="radar-grid" id="radarGrid"></div>
+  <div class="radar-grid" id="radarGrid"></div>  <div class="radar-top" style="margin-top:18px">
+    <div><h3>🎯 PROSPECTING PORTFOLIO — $385 MAX</h3><div class="radar-sub">Small starter positions built around <b>future trajectory</b>, not cards that are already obvious. Buy only at or below the ceiling, and only clean enough to justify the thesis.</div></div>
+    <span class="scan-pill">4 CARDS • 18 COPIES MAX</span>
+  </div>
+  <div class="radar-grid" id="prospectsGrid"></div>
+  <div class="radar-rules" style="margin-top:12px">
+    <div class="rule"><strong>HOW TO DEPLOY $385</strong><br><b>5× Shelgon @ $20 = $100</b> • <b>3× Noctowl @ $25 = $75</b> • <b>3× Spinarak @ $45 = $135</b> • <b>3× Meganium Holo @ $25 = $75</b>.<br>Do not chase above the ceilings. The strategy is to own clean raws before the thesis becomes obvious.</div>
+    <div class="rule"><strong>STOP / INVALIDATION</strong><br>Momentum fades for multiple checkpoints, raw supply floods the market, new PSA supply outpaces price growth, or the apparent signal proves to be a sparse-sale artifact.</div>
+  </div>
   <div class="radar-rules">
     <div class="rule"><strong>GOLD STAR-LIKE TRIGGER</strong><br>We score a card higher when <span class="hot">price acceleration + grading demand + scarce PSA 10 supply</span> arrive together. Low-pop by itself is not enough.</div>
     <div class="rule"><strong>HIGH-POP BREAKOUT RULE</strong><br>A card can enter Radar even with a larger pop when 7/30-day price momentum jumps, submissions accelerate, and multiple market sources agree.</div>
@@ -93,6 +101,16 @@ const RADAR=[
  {name:'Shelgon δ',set:'EX Dragon Frontiers',number:'38/101',variant:'Reverse Holo',signal:'SETUP',score:68,move:'+3.9%',pop:13,quality:'PSA 9 +30.6%',note:'PSA 10 is not ripping yet, but PSA 9 and lower grades are moving. This is the “watch it before the gem tier moves” bucket.',url:'https://www.tcgberg.com/cards/shelgon-38-ex-dragon-frontiers-reverse-holo'}
 ];
 function renderRadar(){const el=document.getElementById('radarGrid'); if(!el)return; el.innerHTML=RADAR.map(x=>`<div class="signal"><div class="sig-head"><span class="name">${esc(x.name)}</span><span class="flag">${esc(x.signal)}</span></div><div class="meta">${esc(x.set)} • ${esc(x.number)} • ${esc(x.variant)}</div><div class="big">${esc(x.move)}</div><div class="small">30D PSA 10 fair-value move • PSA 10 pop ${x.pop} • Radar ${x.score}/100</div><div class="note">${esc(x.note)}</div><a class="src" href="${esc(x.url)}" target="_blank" rel="noopener">Open source ↗</a></div>`).join('')}
+const PROSPECTS=[
+ {name:'Shelgon δ',set:'EX Dragon Frontiers',number:'38/101',variant:'Reverse Holo',status:'BEST EARLY STRUCTURE',price:'$25 raw NM',buy:20,qty:5,total:100,pop:13,graded:86,signal:'PSA 9 +30.6% / PSA 10 +3.9%',image:'https://www.pokevalues.com/card/shelgon-38-ex-dragon-frontiers-reverse-holo/opengraph-image?88f6bb503e5649bd',url:'https://www.tcgberg.com/cards/shelgon-38-ex-dragon-frontiers-reverse-holo',note:'Lower grades are moving before the gem tier. Raw is still around $25 while PSA 10 is around $913, so the thesis is early movement + scarce gems rather than a card everyone already knows is hot.',confidence:'MEDIUM',confirm:'PSA 10 follows the PSA 9 move while raw stays controlled.',invalidate:'Raw supply floods or PSA 10 stays flat while new grading supply accelerates.'},
+ {name:'Noctowl',set:'EX Unseen Forces',number:'43/115',variant:'Reverse Holo',status:'ACCELERATING',price:'$29 raw NM',buy:25,qty:3,total:75,pop:12,graded:108,signal:'PSA 10 +52.9% / PSA 9 +40.7%',image:'https://www.pokevalues.com/card/noctowl-43-unseen-forces-reverse-holo/opengraph-image?88f6bb503e5649bd',url:'https://www.tcgberg.com/cards/noctowl-43-unseen-forces-reverse-holo',note:'Already moving, but raw is still around $29 and the PSA 10 population is only 12. This is the buy-the-raw-lag play.',confidence:'MEDIUM-LOW',confirm:'Fresh PSA 10 sales confirm the higher band and raw NM listings start thinning.',invalidate:'Raw copies become abundant or PSA 10 momentum collapses on stronger sales volume.'},
+ {name:'Spinarak',set:'EX Unseen Forces',number:'75/115',variant:'Reverse Holo',status:'HIGH-BETA SLEEPER',price:'$55 raw NM',buy:45,qty:3,total:135,pop:9,graded:76,signal:'Raw +83.3% / PSA 10 +37.2%',image:'https://www.pokevalues.com/card/spinarak-75-unseen-forces-reverse-holo/opengraph-image?88f6bb503e5649bd',url:'https://www.tcgberg.com/cards/spinarak-75-unseen-forces-reverse-holo',note:'Most aggressive of the four. Only 9 PSA 10s and raw has moved sharply, but graded evidence is sparse. Small position only.',confidence:'LOW-MEDIUM',confirm:'New raw sales confirm the higher floor and PSA 9/10 sales stack higher.',invalidate:'The raw move reverses or fresh sales fail to confirm the apparent repricing.'},
+ {name:'Meganium',set:'EX Unseen Forces',number:'9/115',variant:'Holo',status:'SECOND-ORDER BET',price:'$30 raw NM',buy:25,qty:3,total:75,pop:42,graded:273,signal:'PSA 10 +71.3% / PSA 9 +24.5%',image:'https://www.pokevalues.com/card/meganium-9-unseen-forces-holo/opengraph-image?88f6bb503e5649bd',url:'https://www.tcgberg.com/cards/meganium-9-unseen-forces-holo',note:'Intentionally higher-pop. The thesis is second-order Unseen Forces demand while this recognizable holo remains an affordable raw hunt. Current sources conflict, so size stays small.',confidence:'LOW-MEDIUM',confirm:'Independent sales confirm the PSA 10 move instead of one model spike.',invalidate:'PSA 10 normalizes sharply or raw supply stays abundant with no follow-through.'}
+];
+function renderProspects(){
+ const el=document.getElementById('prospectsGrid'); if(!el)return;
+ el.innerHTML=PROSPECTS.map(x=>'<div class="signal"><div class="sig-head"><span class="name">'+esc(x.name)+'</span><span class="flag">'+esc(x.status)+'</span></div><div class="meta">'+esc(x.set)+' • '+esc(x.number)+' • '+esc(x.variant)+'</div><div style="margin-top:8px;display:flex;justify-content:center;background:#070d13;border:1px solid #2a3b4c;border-radius:9px;padding:7px"><img src="'+esc(x.image)+'" alt="'+esc(x.name+' '+x.number+' '+x.variant)+'" style="height:150px;max-width:110px;object-fit:contain" loading="lazy" onerror="this.style.display='none'"></div><div class="big">BUY ≤ $'+x.buy+'</div><div class="small">'+esc(x.signal)+' • PSA 10 pop '+x.pop+' • '+x.graded+' graded</div><div class="note">'+esc(x.note)+'</div><div class="small" style="margin-top:8px"><b>Starter position:</b> '+x.qty+' × $'+x.buy+' = $'+x.total+' • <b>Confidence:</b> '+esc(x.confidence)+'</div><div class="small" style="margin-top:6px"><b>Confirm:</b> '+esc(x.confirm)+'</div><div class="small" style="margin-top:6px"><b>Invalidation:</b> '+esc(x.invalidate)+'</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px"><a class="src" href="'+esc(x.url)+'" target="_blank" rel="noopener">Market source ↗</a><a class="src" href="https://www.ebay.com/sch/i.html?_nkw='+encodeURIComponent(x.name+' '+x.set+' '+x.number+' '+x.variant)+'&LH_Sold=1&LH_Complete=1" target="_blank" rel="noopener">Sold comps ↗</a></div></div>').join('');
+}
 const SET_ID={
   'EX Team Rocket Returns':'ex7','EX Hidden Legends':'ex5','EX FireRed & LeafGreen':'ex6','EX Deoxys':'ex8',
   'EX Emerald':'ex9','EX Unseen Forces':'ex10','EX Delta Species':'ex11','EX Legend Maker':'ex12',
@@ -152,7 +170,7 @@ function render(){
       </div></article>`;
   }).join('');
 }
-renderRadar();
+renderRadar();renderProspects();
 for(const id of ['q','tier','year','sort']) document.getElementById(id).addEventListener(id==='q'?'input':'change',render);
 render();
 </script></body></html>
